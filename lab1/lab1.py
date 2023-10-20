@@ -353,6 +353,8 @@ def main():
         (out, err) = proc.communicate()
 
         result = out.decode()
+
+        
         with open("lab1/output.txt", "w") as f:
             f.write(result)
         print("\n", result)
