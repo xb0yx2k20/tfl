@@ -269,7 +269,7 @@ def main():
     str = str[:len(str) - 1]"""
     #print(str)
     lines = ''
-    with open("/Users/xb0yx2k20/Documents/tfl/lab1/input.txt", "r") as file:
+    with open("lab1/input.txt", "r") as file:
         str = file.readline()
 
     
@@ -353,7 +353,7 @@ def main():
         (out, err) = proc.communicate()
 
         result = out.decode()
-        with open("output.txt", "w") as f:
+        with open("lab1/output.txt", "w") as f:
             f.write(result)
         print("\n", result)
 
