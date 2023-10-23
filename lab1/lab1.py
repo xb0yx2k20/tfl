@@ -6,12 +6,12 @@ import os
 
 funcs = []
 variables = []
-data = "(set-logic QF_NIA) \n"
+data = ""
 allStr = []
 parts = []
 params = []
 recparts = []
-message = "(set-logic QF_NIA)\n"
+message = ''
 coef_free = []
 coefs = []
 coefs_in_one = []
@@ -257,114 +257,95 @@ def create_mes4():
     return ms
         
 
-def main():
-    global parameters_count, message, coefs, coefs_in_one, mes4
-
-    """str = ""
-    for line in sys.stdin:
-        if len(line) == 1:
-            break
-        str += line
-
-    str = str[:len(str) - 1]"""
-    #print(str)
-    lines = ''
-    with open("lab1/input.txt", "r") as file:
-        str = file.readline()
-
+def main(str):
     
-        for i in range(len(str) - 1):
-            if str[i + 1] == '(' and not checkFun(funcs, str[i]):
-                funcs.append(str[i])
-            elif str[i] != ')' and (str[i - 1] == '(' or str[i + 1] == ')') and not checkFun(variables, str[i]) and not checkFun(funcs, str[i]):
-                variables.append(str[i])
-        parameters_count = {func: 0 for func in funcs}
+    global parameters_count, message, coefs, coefs_in_one, mes4, allStr, declare, parts, funcs
+    allStr = []
+    parts = []
+    funcs = []
+    coefs = []
+    message = ''
 
-        oneStr = ""
-        for s in str:
-            if s == '\n':
-                allStr.append(oneStr)
-                oneStr = ""
-            oneStr += s
-        allStr.append(oneStr)
+    #print(funcs, "bef")
 
+    for i in range(len(str) - 1):
+        if str[i + 1] == '(' and not checkFun(funcs, str[i]):
+            funcs.append(str[i])
+        elif str[i] != ')' and (str[i - 1] == '(' or str[i + 1] == ')') and not checkFun(variables, str[i]) and not checkFun(funcs, str[i]):
+            variables.append(str[i])
+    parameters_count = {func: 0 for func in funcs}
 
+    oneStr = ""
+    for s in str:
+        if s == '\n':
+            allStr.append(oneStr)
+            oneStr = ""
+        oneStr += s
+    allStr.append(oneStr)
+
+    #print(funcs, "after")
+    declare = []
+    for s in allStr:
+        parts.append(s.split(" -> "))
+    parameters1 = count_parameters(parts[0][0], funcs)
+    parameters2 = count_parameters(parts[0][1], funcs)
+    '''for func, count in parameters2.items():
+        print(f"Функция {func} имеет {count} параметров.")'''
+    for func, count in parameters2.items():
+        str = []
+        if count == 0:
+            for i in range(2):
+                str.append(f"{func}{i}")
+            coefs.append(str)
+        else:
+            for i in range(count + 1):
+                str.append(f"{func}{i}")
+            coefs.append(str)
+    for i in range(len(funcs)):
+        #print(funcs[i], coefs[i])
+        for x in coefs[i]:
+            declare.append(f'(declare-fun {x} () Int)\n')
+            coefs_in_one.append(x)
+    message +='\n'
         
-        for s in allStr:
-            parts.append(s.split(" -> "))
-        parameters1 = count_parameters(parts[0][0], funcs)
-        parameters2 = count_parameters(parts[0][1], funcs)
-        for func, count in parameters2.items():
-            print(f"Функция {func} имеет {count} параметров.")
-        for func, count in parameters2.items():
-            str = []
-            if count == 0:
-                for i in range(2):
-                    str.append(f"{func}{i}")
-                coefs.append(str)
-            else:
-                for i in range(count + 1):
-                    str.append(f"{func}{i}")
-                coefs.append(str)
-        for i in range(len(funcs)):
-            print(funcs[i], coefs[i])
-            for x in coefs[i]:
-                message += f'(declare-fun {x} () Int)\n'
-                coefs_in_one.append(x)
-        message +='\n'
+
+    res1 = create_ner(parts[0][0])
+    res2 = create_ner(parts[0][1])
         
 
-        res1 = create_ner(parts[0][0])
-        res2 = create_ner(parts[0][1])
-        
+    qwe = []
+    for i in range(len(variables)):
+        if variables[i] != '(':
+            qwe.append(create_mes1(get_coef(variables[i], res1), get_coef(variables[i], res2)))
+    qwe.append(create_mes1(get_coef(")", res1), get_coef(")", res2)))
+    message += '\n'
 
-        qwe = []
-        for i in range(len(variables)):
-            if variables[i] != '(':
-                qwe.append(create_mes1(get_coef(variables[i], res1), get_coef(variables[i], res2)))
-        qwe.append(create_mes1(get_coef(")", res1), get_coef(")", res2)))
-        message += '\n'
-
-        create_mes2()
+    create_mes2()
     #f(g(x, h()) -> f(x)
 
         
 
 
-        message += '\n' + create_mes3(qwe) + '\n'
+    message += '\n' + create_mes3(qwe) + '\n'
 
-        message += create_mes4() + '\n' + '\n'
+    message += create_mes4() + '\n' + '\n'
+    res = []
+    res.append(declare)
+    res.append(message)
+    #print(res1, '\n', res2, '\n\n', message, "decl")
+    return res
 
-        message += "(check-sat)\n(get-model)\n(exit) final"
-
-        #print(message)
-
+       
                     
         
         
 
 
-        f = open("lab1.smt2", "w")
-
-        f.write(message)
-        f.close()
-
-        proc = subprocess.Popen("z3 -smt2 lab1.smt2", stdout=subprocess.PIPE, shell=True)
-        (out, err) = proc.communicate()
-
-        result = out.decode()
-
         
-        with open("lab1/output.txt", "w") as f:
-            f.write(result)
-        print("\n", result)
-
-        os.remove("lab1.smt2")
 
 
-
-if __name__ == '__main__':
+'''if __name__ == '__main__':
     print('Пример ввода: f(g(x, y)) -> g(x, y)')
 main()
 
-
+'''

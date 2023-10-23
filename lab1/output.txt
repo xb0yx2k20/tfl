@@ -1,13 +1,19 @@
 sat
 (
   (define-fun g0 () Int
-    14)
+    3)
+  (define-fun h1 () Int
+    15)
   (define-fun g2 () Int
-    0)
+    2)
   (define-fun g1 () Int
-    11)
-  (define-fun f0 () Int
     1)
+  (define-fun f0 () Int
+    2)
   (define-fun f1 () Int
+    0)
+  (define-fun h0 () Int
+    1)
+  (define-fun h2 () Int
     15)
 )
