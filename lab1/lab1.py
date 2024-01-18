@@ -36,6 +36,7 @@ count = [0] * len(funcs)
 # Заданный массив функций
 parameters_count = {}
 def count_parameters(input_string, functions):
+    print(input_string)
     # Создаем словарь, в котором будем хранить количество параметров для каждой функции
     
     global parameters_count
@@ -73,8 +74,9 @@ def count_parameters(input_string, functions):
             elif char != ',' and char != ' ' and kk == 1:
                 #print(char,"====", current_function)
                 parameter_count += 1         
-
+        #print(parameters_count)
         return parameters_count
+    
 
     return process_function(input_string)
 
@@ -267,12 +269,13 @@ def main(str):
     message = ''
 
     #print(funcs, "bef")
-
+    print(str, "st5r")
     for i in range(len(str) - 1):
         if str[i + 1] == '(' and not checkFun(funcs, str[i]):
             funcs.append(str[i])
         elif str[i] != ')' and (str[i - 1] == '(' or str[i + 1] == ')') and not checkFun(variables, str[i]) and not checkFun(funcs, str[i]):
             variables.append(str[i])
+    print(funcs, variables, 'fv')
     parameters_count = {func: 0 for func in funcs}
 
     oneStr = ""
@@ -283,7 +286,7 @@ def main(str):
         oneStr += s
     allStr.append(oneStr)
 
-    #print(funcs, "after")
+    print(funcs, "after")
     declare = []
     for s in allStr:
         parts.append(s.split(" -> "))
