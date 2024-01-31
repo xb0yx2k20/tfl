@@ -1,0 +1,4 @@
+n = 1
+variables = x,t,y
+start = g(g(t,t),g(t,t))
+g(x,x) = h(h(x))

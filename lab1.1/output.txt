@@ -1,0 +1,3 @@
+h(h(g(t,t)))
+g(h(h(t)),g(t,t))
+g(g(t,t),h(h(t)))
