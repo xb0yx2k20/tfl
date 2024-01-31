@@ -2,13 +2,11 @@ from TRS import TRSRule
 
 
 def main():
-    CONSOLE_LOG = True
     with open('input.txt', 'r') as input_file, open('output.txt', 'w') as output_file:
         n_equals_line = input_file.readline()
         n = int(n_equals_line[4:]) 
 
-        if CONSOLE_LOG:
-            print("n =", n)
+        print("n =", n)
         
         input_file.read(12) 
         variables = set()
@@ -17,14 +15,12 @@ def main():
         while input_file.read(1) == ',':
             variables.add(input_file.read(1))
 
-        if CONSOLE_LOG:
-            print("variables =", variables)
+        print("variables =", variables)
 
         input_file.read(8) 
         start = TRSRule.Term.from_file(input_file, variables)
         
-        if CONSOLE_LOG:
-            print("start =", start)
+        print("start =", start)
 
         trs = []
         input_file.read(1)
@@ -38,22 +34,19 @@ def main():
             input_file.read(1)
             read_sym = input_file.read(1)
 
-        if CONSOLE_LOG:
-            for rule in trs:
-                print(rule)
-        
+        for rule in trs:
+            print(rule)
+        print()
+
         rewritten_terms = []
         rewritten_terms = start.rewrite(rewritten_terms, trs, n)
 
-        if CONSOLE_LOG:
-            print()
 
         for term in rewritten_terms:
             output_file.write(str(term))
             output_file.write('\n')
             
-            if CONSOLE_LOG:
-                print(term)
+            print(term)
 
 if __name__ == "__main__":
     main()
