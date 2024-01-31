@@ -41,7 +41,7 @@ class TRSRule:
 
         def is_equal(self, term):
             reflex = dict()
-            return self._is_equal(term, reflex)
+            return self._is_equal(term, reflex), reflex
 
         def interpret_with(self, term) -> dict:
             reflex = dict()
@@ -81,7 +81,7 @@ class TRSRule:
 
             
             for i in range(len(self.n_parameters)):
-                
+
                 subterm = copy.deepcopy(self)
                 subresults = []
 
@@ -91,7 +91,7 @@ class TRSRule:
                 
                 for rewrited_term in subresults:
                     subterm.n_parameters[i] = copy.deepcopy(rewrited_term)
-                    results.append(subterm)
+                    results.append(copy.deepcopy(subterm))
             return results
 
         def _interpret_with(self, term, inp_reflex: dict) -> dict:
@@ -122,7 +122,7 @@ class TRSRule:
             return reflex
 
         def _is_equal(self, term, reflex: dict):
- 
+            
             if self.n_is_variable != term.n_is_variable:
                 return False, reflex
 

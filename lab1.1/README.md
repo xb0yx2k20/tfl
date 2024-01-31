@@ -7,7 +7,7 @@
 ## Пример входных данных
 ``` 
 n = 1
-variables = x,t,y
+variables = x,t
 start = g(g(t,t),g(t,t))
 g(x,x) = h(h(x))
  ```
