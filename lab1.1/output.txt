@@ -1,1 +1,6 @@
-h(h(h(h(t))))
+g(h(h(g(t,t))),h(t))
+g(f,h(t))
+g(h(g(h(t),t)),h(t))
+g(h(g(t,t)),f)
+g(g(h(h(t)),t),h(t))
+g(g(f,t),h(t))
