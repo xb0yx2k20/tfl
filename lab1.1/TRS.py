@@ -70,7 +70,8 @@ class TRSRule:
             if self.n_is_variable:
                 return results
 
-            
+            # развертка конструктора
+            # for rule in trs:
             for i in range(len(trs)):
                 reflex = trs[i].left_term.interpret_with(self)
                 if not reflex:
@@ -79,16 +80,16 @@ class TRSRule:
                 term_rewrite = trs[i].right_term.apply_reflex(reflex)
                 results = term_rewrite.rewrite(results, trs, n - 1)
 
-            
+            # развертки агрументов конструктора
             for i in range(len(self.n_parameters)):
-
+                # копируем подтерм
                 subterm = copy.deepcopy(self)
                 subresults = []
 
-                
+                # рекурсивно переписываем
                 subresults = subterm.n_parameters[i].rewrite(subresults, trs, n)
 
-                
+                # подставляем переписанный терм на место
                 for rewrited_term in subresults:
                     subterm.n_parameters[i] = copy.deepcopy(rewrited_term)
                     results.append(copy.deepcopy(subterm))
@@ -96,33 +97,35 @@ class TRSRule:
 
         def _interpret_with(self, term, inp_reflex: dict) -> dict:
             reflex = copy.deepcopy(inp_reflex)
-            
+            # случай сравнения переменной с термом
             if self.n_is_variable:
-                
+                # если переменная уже имеет отображение, сравниваем
                 if self.n_constructor in reflex:
                     comp, reflex = reflex[self.n_constructor].is_equal(term)
                     if not comp:
                         reflex.clear()
                     return reflex
 
-                
+                # добавляем новое отображение переменной
                 reflex[self.n_constructor] = term
                 return reflex
 
-            
+            # если неравны конструкторы или количество параметров, то и термы неравны
             if self.n_constructor != term.n_constructor or len(self.n_parameters) != len(term.n_parameters):
                 reflex.clear()
                 return reflex
 
             for i in range(len(self.n_parameters)):
-                reflex.update(self.n_parameters[i]._interpret_with(term.n_parameters[i], reflex))
-                if not reflex:
-                    return reflex
+                new_reflex = self.n_parameters[i]._interpret_with(term.n_parameters[i], reflex);
+                if not new_reflex:
+                    return new_reflex
+                else:
+                    reflex.update(new_reflex)
 
             return reflex
 
         def _is_equal(self, term, reflex: dict):
-            
+            # если термы не одного типа они не равны
             if self.n_is_variable != term.n_is_variable:
                 return False, reflex
 
