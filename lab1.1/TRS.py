@@ -155,3 +155,4 @@ class TRSRule:
     def __str__(self):
         return f"{self.left_term.__str__()} = {self.right_term.__str__()}"
 
+

@@ -1,4 +1,4 @@
 n = 1
 variables = x,t
 start = g(g(t,t),h(t))
-g(x,x) = g(h(x),x)
+g(x,x) = h(h(x))
