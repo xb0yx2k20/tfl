@@ -1,4 +1,5 @@
-n = 1
-variables = x,t
+n = 2
+variables = x,t,y
 start = g(g(t,t),h(t))
-g(x,x) = h(h(x))
+g(x,y) = g(h(x),y)
+h(t) = f
