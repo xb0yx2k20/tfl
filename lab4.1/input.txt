@@ -1,0 +1,9 @@
+a*bb*b
+S -> A T
+S -> A K
+K -> S B
+A -> a
+T -> S G
+G -> B B
+B -> b
+S ->

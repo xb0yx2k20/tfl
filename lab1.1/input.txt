@@ -1,5 +1,5 @@
 n = 2
-variables = x,t,y
+variables = x,t
 start = g(g(t,t),h(t))
-g(x,y) = g(h(x),y)
-h(t) = f
+g(x,x) = h(h(x))
+h(t) = h(h(t))
